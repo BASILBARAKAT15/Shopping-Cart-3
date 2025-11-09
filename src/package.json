@@ -1,0 +1,27 @@
+{
+  "name": "fruit-store-cart",
+  "version": "1.0.0",
+  "description": "Udacity-style JavaScript project for a Fruit Store shopping cart.",
+  "main": "src/assets/script.js",
+  "scripts": {
+    "test": "jest",
+    "start": "npx live-server --port=3000"
+  },
+  "keywords": [
+    "javascript",
+    "cart",
+    "udacity",
+    "jest",
+    "shopping-cart"
+  ],
+  "author": "Your Name",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "live-server": "^1.2.2"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "verbose": true
+  }
+}

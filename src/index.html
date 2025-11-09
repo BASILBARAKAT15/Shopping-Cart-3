@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fruit Store</title>
+  <link rel="stylesheet" href="/src/assets/styles.css">
+  
+</head>
+<body>
+
+  <div class="header">
+    <h1>Fruit Store</h1>
+  </div>
+
+  <div class="container">
+    <div class="left-section">
+      <div class="products-section">
+        <h2 class="section-title">Products</h2>
+        <div id="balance-msg" style="color: red; margin-bottom: 10px;"></div>
+
+        <!-- Balance display -->
+        <div id="user-balance" class="cart-total">Your Balance: $20</div>
+
+        <!-- Editable balance -->
+        <div class="balance-edit" style="margin-bottom: 15px;">
+          <label for="balance-input">Edit Balance:</label>
+          <input type="number" id="balance-input" placeholder="Enter new balance">
+          <button id="update-balance-btn">Update Balance</button>
+        </div>
+
+        <div id="product-list" class="products-grid"></div>
+      </div>
+
+      <div class="cart-section">
+        <h2 class="section-title">Shopping Cart</h2>
+        <div id="cart-list" class="cart-grid"></div>
+      </div>
+    </div>
+
+    <div class="checkout-section">
+      <h2 class="checkout-title">Checkout</h2>
+
+      <div id="cart-total" class="cart-total">Cart Total: $0</div>
+
+      <label for="cash-input" class="cash-input-label">Enter Cash Received:</label>
+      <div class="cash-input-group">
+        <input type="number" id="cash-input" class="cash-input" placeholder="0">
+        <button id="pay-btn" class="submit-btn">Pay</button>
+      </div>
+
+      <button id="clear-cart-btn" class="submit-btn">Clear Cart</button>
+
+      <h3 class="receipt-title">Receipt</h3>
+      <div id="cash-received" class="receipt-line">Cash Received: $0</div>
+      <div id="remaining-balance" class="receipt-line">Remaining Balance: $0</div>
+      <div id="return-msg" class="receipt-message"></div>
+    </div>
+  </div>
+  <script src="/src/assets/font.js"></script>
+  <script src="/src/assets/script.js"></script>
+</body>
+</html>
