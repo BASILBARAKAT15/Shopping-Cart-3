@@ -1,81 +1,94 @@
-const cart = require('../src/assets/script.js');
+// Import functions and data from script.js
+const cartModule = require('../src/assets/script.js');
 
 describe('Cart Functionality Tests', () => {
-    let product1 = cart.products[1]; // Carton of Strawberries
-    let cartArr = cart.cart;
+  let product1;
+  let product2;
+  let cartArr;
 
-    test('addProductToCart adds product to cart', () => {
-        cart.addProductToCart(product1.productId);
-        expect(product1.quantity).toEqual(1);
-        expect(cartArr).toEqual([product1]);
-    });
+  beforeEach(() => {
+    // Reset the cart and product quantities before each test
+    cartModule.emptyCart();
+    cartModule.products.forEach(p => p.quantity = 0);
 
-    test('addProductToCart a second time does not append the item twice', () => {
-        cart.addProductToCart(product1.productId);
-        expect(product1.quantity).toEqual(2);
-        expect(cartArr).toEqual([product1]);
-    });
+    product1 = cartModule.products[0]; // Cherries
+    product2 = cartModule.products[1]; // Strawberries
+    cartArr = cartModule.cart;
+  });
 
-    test('increase product quantity', () => {
-        cart.increaseQuantity(product1.productId);
-        expect(product1.quantity).toEqual(3);
-    });
+  test('addProductToCart adds product to cart', () => {
+    cartModule.addProductToCart(product1.productId);
+    expect(cartArr.length).toBe(1);
+    expect(cartArr[0].quantity).toBe(1);
+    expect(cartArr[0].productId).toBe(product1.productId);
+  });
 
-    test('increase a second time', () => {
-        cart.increaseQuantity(product1.productId);
-        expect(product1.quantity).toEqual(4);
-    });
+  test('adding the same product again increases its quantity', () => {
+    cartModule.addProductToCart(product1.productId);
+    cartModule.addProductToCart(product1.productId);
+    expect(cartArr.length).toBe(1);
+    expect(cartArr[0].quantity).toBe(2);
+  });
 
-    test('decrease quantity from 4 to 1 items', () => {
-        cart.decreaseQuantity(product1.productId);
-        cart.decreaseQuantity(product1.productId);
-        cart.decreaseQuantity(product1.productId);
-        expect(product1.quantity).toEqual(1);
-    });
+  test('increaseQuantity works correctly', () => {
+    cartModule.addProductToCart(product1.productId);
+    cartModule.increaseQuantity(product1.productId);
+    expect(cartArr[0].quantity).toBe(2);
+  });
 
-    test('decrease quantity from 1 to 0 removes item from cart', () => {
-        cart.decreaseQuantity(product1.productId);
-        expect(product1.quantity).toEqual(0);
-        expect(cartArr).toEqual([]);
-    });
+  test('decreaseQuantity decreases quantity and removes item when 0', () => {
+    cartModule.addProductToCart(product1.productId);
+    cartModule.increaseQuantity(product1.productId); // quantity = 2
+    cartModule.decreaseQuantity(product1.productId); // quantity = 1
+    expect(cartArr[0].quantity).toBe(1);
 
-    test('remove 1 item from cart updates quantity to 0 and removes from cart', () => {
-        cart.addProductToCart(product1.productId);
-        cart.removeProductFromCart(product1.productId);
-        expect(product1.quantity).toEqual(0);
-        expect(cartArr).toEqual([]);
-    });
+    cartModule.decreaseQuantity(product1.productId); // quantity = 0 → removed
+    expect(cartArr.length).toBe(0);
+  });
+
+  test('removeProductFromCart clears product from cart', () => {
+    cartModule.addProductToCart(product1.productId);
+    cartModule.removeProductFromCart(product1.productId);
+    expect(cartArr.length).toBe(0);
+  });
 });
 
 describe('Checkout Functionality Tests', () => {
-    let product1 = cart.products[1]; // Strawberries
-    let product2 = cart.products[2]; // Oranges
-    let cartArr = cart.cart;
+  let product1;
+  let product2;
+  let cartArr;
 
-    // Function to manually calculate grand total
-    function grandTotal() {
-        let cartSum = 0;
-        for (let i = 0; i < cartArr.length; i++) {
-            let itemTotal = cartArr[i].quantity * cartArr[i].price;
-            cartSum += itemTotal;
-        }
-        return cartSum;
-    }
+  beforeEach(() => {
+    cartModule.emptyCart();
+    cartModule.products.forEach(p => p.quantity = 0);
 
-    test('cartTotal gets grand total of cart', () => {
-        cart.addProductToCart(product1.productId);
-        cart.addProductToCart(product2.productId);
-        cart.increaseQuantity(product1.productId);
-        expect(cart.cartTotal()).toEqual(grandTotal());
-    });
+    product1 = cartModule.products[0]; // Cherries
+    product2 = cartModule.products[2]; // Oranges
+    cartArr = cartModule.cart;
+  });
 
-    test('pay more than the total works', () => {
-        expect(cart.pay(100000000000000)).toBeGreaterThan(grandTotal());
-    });
+  test('cartTotal calculates correct total', () => {
+    cartModule.addProductToCart(product1.productId);
+    cartModule.addProductToCart(product2.productId);
+    cartModule.increaseQuantity(product1.productId); // Cherries quantity = 2
 
-    test('pay less than the total works', () => {
-        cart.addProductToCart(product1.productId);
-        cart.addProductToCart(product2.productId);
-        expect(cart.pay(1)).toBeLessThan(grandTotal());
-    });
+    const total = cartModule.cartTotal();
+    expect(total).toBe(product1.price * 2 + product2.price * 1);
+  });
+
+  test('pay more than total returns success and correct change', () => {
+    cartModule.addProductToCart(product1.productId);
+    const result = cartModule.pay(1000);
+    expect(result.success).toBe(true);
+    expect(result.change).toBeGreaterThan(0);
+  });
+
+  test('partial payment returns remaining amount', () => {
+    cartModule.addProductToCart(product1.productId);
+    cartModule.addProductToCart(product2.productId);
+    const result = cartModule.pay(1);
+    expect(result.success).toBe(true);
+    expect(result.remaining).toBeDefined();
+    expect(result.remaining).toBeGreaterThan(0);
+  });
 });
