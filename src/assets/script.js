@@ -2,17 +2,18 @@
 // Global Variables
 // ---------------------------
 const products = [
-  { productId: 1, name: "Carton of Cherries", price: 4, quantity: 0 },
-  { productId: 2, name: "Carton of Strawberries", price: 5, quantity: 0 },
-  { productId: 3, name: "Bag of Oranges", price: 10, quantity: 0 }
+  { productId: 1, name: "Carton of Cherries", price: 4, image: "./images/cherry.jpg" },
+  { productId: 2, name: "Carton of Strawberries", price: 5, image: "./images/strawberry.jpg" },
+  { productId: 3, name: "Bag of Oranges", price: 10, image: "./images/orange.jpg" }
 ];
 
-let balance = 20;  // User balance
-let cart = [];     // Shopping cart
-let totalPaid = 0; // For partial payments
+
+let balance = 20;
+let cart = [];
+let totalPaid = 0;
 
 // ---------------------------
-// Cart Operations
+// Cart Functions
 // ---------------------------
 function addProductToCart(id) {
   const product = products.find(p => p.productId === id);
@@ -46,7 +47,7 @@ function removeProductFromCart(id) {
 }
 
 function cartTotal() {
-  return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  return cart.reduce((total, item) => total + item.price * item.quantity, 0);
 }
 
 function emptyCart() {
@@ -58,8 +59,13 @@ function emptyCart() {
 // Payment Function
 // ---------------------------
 function pay(amount) {
-  if (isNaN(amount) || amount <= 0) return { success: false, message: "Invalid amount" };
-  if (amount > balance) return { success: false, message: "Insufficient balance" };
+  if (isNaN(amount) || amount <= 0) {
+    return { success: false, message: "Invalid amount" };
+  }
+
+  if (amount > balance) {
+    return { success: false, message: "Insufficient balance" };
+  }
 
   balance -= amount;
   totalPaid += amount;
@@ -68,28 +74,26 @@ function pay(amount) {
   const remaining = total - totalPaid;
 
   if (remaining <= 0) {
-    const change = -remaining; // positive if overpaid
-    balance += change; // refund extra money
+    const change = -remaining;
+    balance += change;
     emptyCart();
     return { success: true, change, message: "Payment successful" };
-  } else {
-    return { success: true, remaining, message: "Partial payment received" };
   }
+
+  return { success: true, remaining, message: "Partial payment received" };
 }
 
 // ---------------------------
 // Export Block
 // ---------------------------
 module.exports = {
-   products,
-   cart,
-   addProductToCart,
-   increaseQuantity,
-   decreaseQuantity,
-   removeProductFromCart,
-   cartTotal,
-   pay, 
-   emptyCart,
-   /* Uncomment the following line if completing the currency converter bonus */
-   // currency
+  products,
+  cart,
+  addProductToCart,
+  increaseQuantity,
+  decreaseQuantity,
+  removeProductFromCart,
+  cartTotal,
+  pay,
+  emptyCart
 };
