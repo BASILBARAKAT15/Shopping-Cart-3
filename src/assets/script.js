@@ -2,9 +2,9 @@
 // Global Variables
 // ---------------------------
 const products = [
-  { productId: 1, name: "Carton of Cherries", price: 4, image: "../images/cherry.jpg" },
-  { productId: 2, name: "Carton of Strawberries", price: 5, image: "../images/strawberry.jpg" },
-  { productId: 3, name: "Bag of Oranges", price: 10, image: "../images/orange.jpg" }
+  { productId: 1, name: "Carton of Cherries", price: 4, image: "./images/cherry.jpg" },
+  { productId: 2, name: "Carton of Strawberries", price: 5, image: "./images/strawberry.jpg" },
+  { productId: 3, name: "Bag of Oranges", price: 10, image: "./images/orange.jpg" }
 ];
 
 
@@ -56,33 +56,25 @@ function emptyCart() {
 }
 
 // ---------------------------
-// Payment Function
-// ---------------------------
+
+
 function pay(amount) {
   if (isNaN(amount) || amount <= 0) {
     return { success: false, message: "Invalid amount" };
   }
 
-  if (amount > balance) {
-    return { success: false, message: "Insufficient balance" };
-  }
-
-  balance -= amount;
   totalPaid += amount;
-
-  const total = cartTotal();
-  const remaining = total - totalPaid;
+  const remaining = cartTotal() - totalPaid;
 
   if (remaining <= 0) {
-    const change = -remaining;
-    balance += change;
+    const change = Math.abs(remaining);
     emptyCart();
-    return { success: true, change, message: "Payment successful" };
+    totalPaid = 0;
+    return { success: true, change };
   }
 
-  return { success: true, remaining, message: "Partial payment received" };
+  return { success: true, remaining };
 }
-
 // ---------------------------
 // Export Block
 // ---------------------------
