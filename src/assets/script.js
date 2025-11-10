@@ -56,25 +56,49 @@ function emptyCart() {
 }
 
 // ---------------------------
-
-
 function pay(amount) {
   if (isNaN(amount) || amount <= 0) {
     return { success: false, message: "Invalid amount" };
   }
 
-  totalPaid += amount;
-  const remaining = cartTotal() - totalPaid;
-
-  if (remaining <= 0) {
-    const change = Math.abs(remaining);
-    emptyCart();
-    totalPaid = 0;
-    return { success: true, change };
+  if (amount > balance) {
+    return { success: false, message: "Insufficient balance" };
   }
 
-  return { success: true, remaining };
+  balance -= amount;
+  totalPaid += amount;
+
+  const total = cartTotal();
+  const remaining = total - totalPaid;
+
+  if (remaining <= 0) {
+    const change = -remaining;
+    balance += change;
+    emptyCart();
+    return { success: true, change, message: "Payment successful" };
+
+  }
+
+  return { success: true, remaining, message: "Partial payment received" };
 }
+
+// function pay(amount) {
+//   if (isNaN(amount) || amount <= 0) {
+//     return { success: false, message: "Invalid amount" };
+//   }
+
+//   totalPaid += amount;
+//   const remaining = cartTotal() - totalPaid;
+
+//   if (remaining <= 0) {
+//     const change = Math.abs(remaining);
+//     emptyCart();
+//     totalPaid = 0;
+//     return { success: true, change };
+//   }
+
+//   return { success: true, remaining };
+// }
 // ---------------------------
 // Export Block
 // ---------------------------
