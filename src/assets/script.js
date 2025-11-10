@@ -2,9 +2,9 @@
 // Global Variables
 // ---------------------------
 const products = [
-  { productId: 1, name: "Carton of Cherries", price: 4, image: "./images/cherry.jpg" },
-  { productId: 2, name: "Carton of Strawberries", price: 5, image: "./images/strawberry.jpg" },
-  { productId: 3, name: "Bag of Oranges", price: 10, image: "./images/orange.jpg" }
+  { productId: 1, name: "Carton of Cherries", price: 4, image: "../images/cherry.jpg" },
+  { productId: 2, name: "Carton of Strawberries", price: 5, image: "../images/strawberry.jpg" },
+  { productId: 3, name: "Bag of Oranges", price: 10, image: "../images/orange.jpg" }
 ];
 
 
