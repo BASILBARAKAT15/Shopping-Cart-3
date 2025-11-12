@@ -98,19 +98,7 @@ This project demonstrates DOM manipulation, event handling, dynamic rendering, a
 
 ---
 
-## 🖼 Screenshots
 
-**Home Page**
-![Home Page](screenshots/home.png)
-
-**Product Listing**
-![Product Listing](screenshots/products.png)
-
-**Shopping Cart**
-![Shopping Cart](screenshots/cart.png)
-
-**Checkout & Receipt**
-![Checkout](screenshots/checkout.png)
 
 > *Replace the screenshots folder with actual images of your app.*
 
