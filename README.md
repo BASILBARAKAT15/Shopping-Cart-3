@@ -100,7 +100,6 @@ This project demonstrates DOM manipulation, event handling, dynamic rendering, a
 
 
 
-> *Replace the screenshots folder with actual images of your app.*
 
 ---
 
